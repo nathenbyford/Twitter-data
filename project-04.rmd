@@ -1,0 +1,20 @@
+---
+title: "Project 4"
+author: "Nathen Byford"
+date: "12/2/2021"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library("tidyverse")
+theme_set(
+  theme_bw() +
+  theme(panel.grid.minor.x = element_blank(),
+    axis.title.y = element_text(angle = 0, vjust = .5)
+  )
+)
+```
+
+# Load data
+
