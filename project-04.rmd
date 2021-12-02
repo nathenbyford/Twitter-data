@@ -19,6 +19,6 @@ theme_set(
 # Load data
 
 ```{r}
-dtweets <- readRDS(".//data//dtweets.rds")
+dtweets <- read_rds(".//data//dtweets.rds")
 ```
 
