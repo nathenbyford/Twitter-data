@@ -22,3 +22,21 @@ theme_set(
 dtweets <- read_rds(".//data//dtweets.rds")
 ```
 
+#Question 2
+
+```{r}
+dtweets |> 
+  mutate(length = str_length(text)) |> 
+    ggplot() +
+    geom_histogram(aes(x=length), fill = "tan1", color = "cornsilk1", binwidth =5) +
+    #Color choices inspired by the color of Donald Trump's hair and face
+    labs(title = "Bimodal distribution of Donald Trump's Tweet Length") +
+    xlab("Length of Tweet in Characters")+
+    ylab("Number of Tweets") +
+    theme_dark()
+    #Theme chosen to emphasize color choice
+
+
+```
+
+
