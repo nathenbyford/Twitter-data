@@ -24,7 +24,7 @@ dtweets <- read_rds(".//data//dtweets.rds")
 
 # Question 2
 
-```{r}
+```{r, fig.height=3.5, fig.align='center'}
 dtweets |> 
   mutate(length = str_length(text)) |> 
     ggplot() +
@@ -33,10 +33,31 @@ dtweets |>
     labs(title = "Bimodal distribution of Donald Trump's Tweet Length") +
     xlab("Length of Tweet in Characters")+
     ylab("Number of Tweets") +
-    theme_dark()
-    #Theme chosen to emphasize color choice
-
-
+    theme_dark() + #Theme chosen to emphasize color choice
+    theme(panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank())
 ```
 
+
+# Question 3
+
+```{r}
+good_grade <- "The correct thing here"
+```
+
+# Question 4
+
+```{r}
+mentions <- dtweets |> 
+  pull(text) |> 
+  str_extract_all(pattern = "\\@\\w{4,15}")
+
+map(mentions, str_split, pattern = ", ") |> 
+  unlist() |> 
+  as_tibble() |> 
+  group_by(value) |> 
+  count() |> 
+  ungroup() |> 
+  arrange(desc(n))
+
+```
 
