@@ -9,8 +9,8 @@ output: pdf_document
 knitr::opts_chunk$set(echo = TRUE)
 library("tidyverse")
 theme_set(
-  theme_bw() +
-  theme(panel.grid.minor.x = element_blank(),
+  theme_classic() +
+  theme(panel.grid.major.y = element_line(),
     axis.title.y = element_text(angle = 0, vjust = .5)
   )
 )
