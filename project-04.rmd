@@ -7,11 +7,15 @@ output: pdf_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, collapse = TRUE)
+library("lubridate")
+library("ggtech")
+library("hms")
 library("tidyverse")
 theme_set(
   theme_classic() +
   theme(panel.grid.major.y = element_line(),
-    axis.title.y = element_text(angle = 0, vjust = .5)
+    axis.title.y = element_text(angle = 0, vjust = .5),
+    title = element_text(face = "bold")
   )
 )
 ```
@@ -28,20 +32,32 @@ dtweets <- read_rds(".//data//dtweets.rds")
 dtweets |> 
   mutate(length = str_length(text)) |> 
     ggplot() +
-    geom_histogram(aes(x=length), fill = "tan1", color = "cornsilk1", binwidth =5) +
-    #Color choices inspired by the color of Donald Trump's hair and face
+    geom_histogram(aes(x=length), fill = "#55ACEE", color = "white", binwidth =5) +
     labs(title = "Bimodal distribution of Donald Trump's Tweet Length") +
     xlab("Length of Tweet in Characters")+
-    ylab("Number of Tweets") +
-    theme_dark() + #Theme chosen to emphasize color choice
-    theme(panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank())
+    ylab("Number of Tweets") 
 ```
 
 
 # Question 3
 
-```{r}
-good_grade <- "The correct thing here"
+```{r, fig.height=3.5, fig.align='center'}
+dtweets |> 
+  mutate(time = as_hms(created_at)) |> 
+  ggplot(aes(x = time)) +
+  geom_histogram(fill = "#55ACEE", color = "white", bins = 24) +
+  scale_x_time(
+    breaks = c(as_hms("00:00:00"), as_hms("06:00:00"), as_hms("12:00:00"), 
+               as_hms("18:00:00"), as_hms("24:00:00")),
+    labels = c("12 AM", "6 AM", "12 pm", "6 PM", "12 AM")
+  ) +
+  labs(
+    title = "Tweets by Time of Day", 
+    subtitle = "Posted by Donny T", 
+    x = "Time (UTC)",
+    y = "Tweets"
+  )
+  
 ```
 
 # Question 4
@@ -57,7 +73,45 @@ map(mentions, str_split, pattern = ", ") |>
   group_by(value) |> 
   count() |> 
   ungroup() |> 
-  arrange(desc(n))
+  arrange(desc(n)) |> 
+  head(n = 20)
 
+```
+
+# Question 5
+
+```{r, out.width="100%"}
+dtweets |> 
+  top_n(favorite_count, n = 10) |> 
+  select(text) |> 
+  pull() |> 
+  str_wrap(width = 40) |> 
+  paste(collapse = "/n") |> 
+  message()
+```
+
+# Question 6
+
+What tweet did Pres. Trump tag the most people in?
+
+```{r}
+mentions <- dtweets |> 
+  pull(text) |> 
+  str_extract_all(pattern = "\\@\\w{4,15}")
+
+new_mentions <- mentions |> 
+  map(length) |> 
+  unlist() |> 
+  as_tibble() |> 
+  rename(mentions = value) |> 
+  mutate(index = row_number()) |> 
+  arrange(desc(mentions))
+
+dtweets |> 
+  mutate(index = row_number()) |>
+  inner_join(new_mentions) |> 
+  top_n(mentions, n = 1) |> 
+  select(text) |> 
+  str_wrap()
 ```
 
