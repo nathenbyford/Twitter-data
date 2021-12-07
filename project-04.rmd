@@ -43,7 +43,8 @@ The interesting finding from this histogram is that there are tweets longer than
 
 ```{r, fig.height=3.5, fig.align='center'}
 dtweets |> 
-  mutate(time = as_hms(created_at)) |> 
+  mutate(date = with_tz(as_datetime(created_at), tzone = "America/New_york"),
+         time = as_hms(date))|> 
   ggplot(aes(x = time)) +
   geom_histogram(fill = "#55ACEE", color = "white", bins = 24) +
   scale_x_time(
@@ -54,7 +55,7 @@ dtweets |>
   labs(
     title = "Tweets by Time of Day", 
     subtitle = "Posted by Donny T", 
-    x = "Time (UTC)",
+    x = "Time (EST)",
     y = "Tweets"
   )
   
