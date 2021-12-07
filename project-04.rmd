@@ -8,7 +8,6 @@ output: pdf_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, collapse = TRUE)
 library("lubridate")
-library("ggtech")
 library("hms")
 library("tidyverse")
 theme_set(
