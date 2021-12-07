@@ -86,7 +86,7 @@ dtweets |>
   select(text) |> 
   pull() |> 
   str_wrap(width = 40) |> 
-  paste(collapse = "/n") |> 
+  cat(sep = "\n \n") |> 
   message()
 ```
 
@@ -94,7 +94,7 @@ dtweets |>
 
 What tweet did Pres. Trump tag the most people in?
 
-```{r}
+```{r, message=FALSE}
 mentions <- dtweets |> 
   pull(text) |> 
   str_extract_all(pattern = "\\@\\w{4,15}")
@@ -112,6 +112,7 @@ dtweets |>
   inner_join(new_mentions) |> 
   top_n(mentions, n = 1) |> 
   select(text) |> 
-  str_wrap()
+  str_wrap(width = 40) |> 
+  cat()
 ```
 
