@@ -38,6 +38,7 @@ dtweets |>
     ylab("Number of Tweets") 
 ```
 
+The interesting finding from this histogram is that there are tweets longer than the 280 character limit.
 
 # Question 3
 
