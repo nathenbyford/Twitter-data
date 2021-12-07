@@ -1,6 +1,6 @@
 ---
 title: "Project 4"
-author: "Connor Bryson, Nathen Byford, Miguel Iglesia"
+author: "Connor Bryson, Nathen Byford, Miguel Iglesias"
 date: "12/2/2021"
 output: pdf_document
 ---
