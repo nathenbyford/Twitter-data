@@ -32,9 +32,7 @@ dtweets <- read_rds(".//data//dtweets.rds")
 dtweets |> 
   mutate(length = str_length(text)) |> 
     ggplot() +
-    geom_histogram(aes(x = length, fill = as.factor(length)), 
-                   color = "white", binwidth =5) +
-    scale_fill_taylor(palette = "speakNow") +
+    geom_histogram(aes(x = length), fill = "#1D9BF0", color = "white", binwidth =5) +
     labs(title = "Bimodal distribution of Donald Trump's Tweet Length") +
     xlab("Length of Tweet in Characters")+
     ylab("Number of Tweets") +
@@ -49,14 +47,10 @@ The interesting finding from this histogram is that there are tweets longer than
 dtweets |> 
   mutate(date = with_tz(as_datetime(created_at), tzone = "America/New_york"),
          time = as_hms(date))|> 
-  ggplot(aes(x = as.factor(hour(time)))) +
-  geom_histogram(aes(fill = as.factor(hour(time))), color = "white", bins = 24) +
-  scale_x_time(
-    breaks = c(as_hms("00:00:00"), as_hms("06:00:00"), as_hms("12:00:00"), 
-               as_hms("18:00:00"), as_hms("24:00:00")),
-    labels = c("12 AM", "6 AM", "12 pm", "6 PM", "12 AM")
-  ) +
+  ggplot(aes(x = factor(hour(time), levels = 0:23))) +
+  geom_bar(aes(fill = as.factor(hour(time))), color = "white") +
   scale_fill_taylor(palette = "lover") +
+  scale_x_discrete(drop = FALSE) +
   labs(
     title = "Tweets by Time of Day", 
     subtitle = "Created by Pres. Trump", 
