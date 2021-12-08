@@ -9,6 +9,7 @@ output: pdf_document
 knitr::opts_chunk$set(echo = TRUE, collapse = TRUE)
 library("lubridate")
 library("hms")
+library("tayloRswift")
 library("tidyverse")
 theme_set(
   theme_classic() +
@@ -31,10 +32,13 @@ dtweets <- read_rds(".//data//dtweets.rds")
 dtweets |> 
   mutate(length = str_length(text)) |> 
     ggplot() +
-    geom_histogram(aes(x=length), fill = "#55ACEE", color = "white", binwidth =5) +
+    geom_histogram(aes(x = length, fill = as.factor(length)), 
+                   color = "white", binwidth =5) +
+    scale_fill_taylor(palette = "speakNow") +
     labs(title = "Bimodal distribution of Donald Trump's Tweet Length") +
     xlab("Length of Tweet in Characters")+
-    ylab("Number of Tweets") 
+    ylab("Number of Tweets") +
+    theme(legend.position = "none")
 ```
 
 The interesting finding from this histogram is that there are tweets longer than the 280 character limit.
@@ -45,19 +49,21 @@ The interesting finding from this histogram is that there are tweets longer than
 dtweets |> 
   mutate(date = with_tz(as_datetime(created_at), tzone = "America/New_york"),
          time = as_hms(date))|> 
-  ggplot(aes(x = time)) +
-  geom_histogram(fill = "#55ACEE", color = "white", bins = 24) +
+  ggplot(aes(x = as.factor(hour(time)))) +
+  geom_histogram(aes(fill = as.factor(hour(time))), color = "white", bins = 24) +
   scale_x_time(
     breaks = c(as_hms("00:00:00"), as_hms("06:00:00"), as_hms("12:00:00"), 
                as_hms("18:00:00"), as_hms("24:00:00")),
     labels = c("12 AM", "6 AM", "12 pm", "6 PM", "12 AM")
   ) +
+  scale_fill_taylor(palette = "lover") +
   labs(
     title = "Tweets by Time of Day", 
-    subtitle = "Posted by Donny T", 
+    subtitle = "Created by Pres. Trump", 
     x = "Time (EST)",
     y = "Tweets"
-  )
+  ) +
+  theme(legend.position = "none")
   
 ```
 
