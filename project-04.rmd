@@ -49,6 +49,9 @@ dtweets |>
          time = as_hms(date))|> 
   ggplot(aes(x = factor(hour(time), levels = 0:23))) +
   geom_bar(aes(fill = as.factor(hour(time))), color = "white") +
+  # Went with geom_bar because it was easier when converting to factor for color changes.
+  # Also with this method and box plot there is no overlapping time,
+  # it is truly by hour, geom_hist did not give us by hour, even when playing with bins.
   scale_fill_taylor(palette = "lover") +
   scale_x_discrete(drop = FALSE) +
   labs(
@@ -60,6 +63,8 @@ dtweets |>
   theme(legend.position = "none")
   
 ```
+
+In this plot we can see what hours of the day in eastern time President Trump was or was not on twitter. We can clearly see that he would not post from 2 AM to 4 AM.
 
 # Question 4
 
@@ -93,13 +98,9 @@ dtweets |>
 
 # Question 6
 
-What tweet did Pres. Trump tag the most people in?
+In what tweet did President Trump tag the most people in?
 
 ```{r, message=FALSE}
-mentions <- dtweets |> 
-  pull(text) |> 
-  str_extract_all(pattern = "\\@\\w{4,15}")
-
 new_mentions <- mentions |> 
   map(length) |> 
   unlist() |> 
@@ -113,7 +114,7 @@ dtweets |>
   inner_join(new_mentions) |> 
   top_n(mentions, n = 1) |> 
   select(text) |> 
-  str_wrap(width = 40) |> 
+  str_wrap(width = 50) |> 
   cat()
 ```
 
